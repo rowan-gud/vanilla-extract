@@ -13,7 +13,7 @@
  * interpreted as pixel values since they can be used to represent unitless
  * values.
  */
-type Operand = string | number | Calc;
+export type Operand = string | number | Calc;
 
 class Calc {
   private static isTerm(op: Operand): op is Calc {
@@ -167,7 +167,7 @@ class Calc {
   /**
    * Convert the current Calc instance to a string
    *
-   * NOTE: This is not the same as calling build(). The resulting string will
+   * NOTE: This is not the same as calling toString(). The resulting string will
    * not be wrapped in a calc() function
    *
    * @returns The string representation of the Calc instance
@@ -178,7 +178,7 @@ class Calc {
    * expect(result.build()).toBe('1 + 3');
    * ```
    */
-  public build(): string {
+  private build(): string {
     if (this.operator === undefined) {
       return this.expressions[0] ?? '';
     }
