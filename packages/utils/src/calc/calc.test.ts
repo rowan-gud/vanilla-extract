@@ -23,7 +23,7 @@ import {
 
 const css = 'var(--some-css-var)';
 
-describe('class UnitCalc', () => {
+describe('class Calc', () => {
   describe('add()', () => {
     it.each`
       args                     | expectedExpressions | expectedBuilt
