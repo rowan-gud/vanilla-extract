@@ -255,33 +255,3 @@ export function oklch(l: number, c: number, h: number, alpha?: number): string {
 export function color(from: string, ...args: (string | number)[]): string {
   return `color(${from} ${args.join(', ')})`;
 }
-
-// Calc Constants
-
-export function e(factor?: number): string {
-  if (factor !== undefined) {
-    return `${factor} * e`;
-  }
-
-  return 'e';
-}
-
-export function pi(factor?: number): string {
-  if (factor !== undefined) {
-    return `${factor} * pi`;
-  }
-
-  return 'pi';
-}
-
-export function inf(): string {
-  return 'infinity';
-}
-
-export function negInf(): string {
-  return '-infinity';
-}
-
-export function nan(): string {
-  return 'NaN';
-}
