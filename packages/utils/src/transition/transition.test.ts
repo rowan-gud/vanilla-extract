@@ -7,18 +7,18 @@ describe('class Transition', () => {
 
       expect(result).toMatchObject({
         properties: ['opacity'],
-        durationValue: '1s',
+        configuration: { transitionDuration: '1s' },
       });
     });
   });
 
   describe('easing()', () => {
     it('should set the easing function of the transition', () => {
-      const result = transition('opacity').easing('ease-in');
+      const result = transition('opacity').timingFunction('ease-in');
 
       expect(result).toMatchObject({
         properties: ['opacity'],
-        easingValue: 'ease-in',
+        configuration: { transitionTimingFunction: 'ease-in' },
       });
     });
   });
@@ -46,7 +46,7 @@ describe('class Transition', () => {
     it('should build the transition string with duration and easing', () => {
       const result = transition('opacity')
         .duration('1s')
-        .easing('ease-in')
+        .timingFunction('ease-in')
         .toString();
 
       expect(result).toBe('opacity 1s ease-in');

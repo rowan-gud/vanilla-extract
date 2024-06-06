@@ -7,31 +7,43 @@
  * @author rowan-gud
  */
 
-let defaultDuration = '300ms';
-let defaultEasing = 'cubic-bezier(0.4, 0, 0.2, 1)';
+import { PropertiesHyphen as Properties, Property } from 'csstype';
 
-export function configureTransitionDefaults({
-  duration,
-  easing,
-}: {
-  duration?: string;
-  easing?: string;
-}) {
-  if (duration !== undefined) {
-    defaultDuration = duration;
-  }
+import { cubicBezier } from '../functions';
+import { Time, coerceToTime } from '../types';
 
-  if (easing !== undefined) {
-    defaultEasing = easing;
-  }
+export interface TransitionConfig {
+  transitionDuration: Property.TransitionDuration<Time>;
+  transitionTimingFunction: Property.TransitionTimingFunction;
+  transitionDelay?: Property.TransitionDelay<Time>;
+}
+
+const defaultConfig: TransitionConfig = {
+  transitionDuration: '300ms',
+  transitionTimingFunction: cubicBezier(0.4, 0, 0.2, 1),
+};
+
+/**
+ * Set the default transition configuration
+ *
+ * @param newConfig - The new default configuration
+ * @example
+ * ```ts
+ * transitionConfigDefaults({
+ *  transitionDuration: '1s',
+ *  transitionTimingFunction: 'ease-in',
+ * });
+ * ```
+ */
+export function transitionConfigDefaults(newConfig: Partial<TransitionConfig>) {
+  Object.assign(defaultConfig, newConfig);
 }
 
 /** */
 class Transition {
   constructor(
-    private readonly properties: string[],
-    private readonly durationValue: string = defaultDuration,
-    private readonly easingValue: string = defaultEasing,
+    private readonly properties: (keyof Properties)[],
+    private readonly configuration: TransitionConfig = { ...defaultConfig },
     private readonly otherTransitions: Transition[] = [],
   ) {}
 
@@ -49,15 +61,15 @@ class Transition {
    * expect(result.build()).toBe('opacity 1s cubic-bezier(0.4, 0, 0.2, 1)');
    * ```
    */
-  public duration(duration: string | number): Transition {
-    const numberDuration = Number(duration);
-
+  public duration(
+    duration: Property.TransitionDuration<Time> | number,
+  ): Transition {
     return new Transition(
       this.properties,
-      Number.isNaN(numberDuration)
-        ? (duration as string)
-        : `${numberDuration}ms`,
-      this.easingValue,
+      {
+        ...this.configuration,
+        transitionDuration: coerceToTime(duration),
+      },
       this.otherTransitions,
     );
   }
@@ -74,11 +86,40 @@ class Transition {
    * expect(result.build()).toBe('opacity 300ms ease-in');
    * ```
    */
-  public easing(easing: string): Transition {
+  public timingFunction(
+    timingFunction: Property.TransitionTimingFunction,
+  ): Transition {
     return new Transition(
       this.properties,
-      this.durationValue,
-      easing,
+      {
+        ...this.configuration,
+        transitionTimingFunction: timingFunction,
+      },
+      this.otherTransitions,
+    );
+  }
+
+  /**
+   * Set the delay of the transition
+   *
+   * @param delay - The delay of the transition. Can be a number in milliseconds
+   * or a string with a unit (e.g. '300ms'). If the string is missing a unit,
+   * 'ms' will be added. eg: '300' -> '300ms'
+   * @returns A new Transition instance with the delay set
+   * @example
+   * ```ts
+   * const result = transition('opacity').delay('1s');
+   *
+   * expect(result.build()).toBe('opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 1s');
+   * ```
+   */
+  public delay(delay: Property.TransitionDelay<Time> | number): Transition {
+    return new Transition(
+      this.properties,
+      {
+        ...this.configuration,
+        transitionDelay: coerceToTime(delay),
+      },
       this.otherTransitions,
     );
   }
@@ -100,12 +141,10 @@ class Transition {
    * ```
    */
   public and(...transitions: Transition[]): Transition {
-    return new Transition(
-      this.properties,
-      this.durationValue,
-      this.easingValue,
-      [...this.otherTransitions, ...transitions],
-    );
+    return new Transition(this.properties, this.configuration, [
+      ...this.otherTransitions,
+      ...transitions,
+    ]);
   }
 
   /**
@@ -120,10 +159,16 @@ class Transition {
    * ```
    */
   public toString(): string {
+    const cfg = [
+      this.configuration.transitionDuration,
+      this.configuration.transitionTimingFunction,
+      this.configuration.transitionDelay,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
     const self = this.properties
-      .map(
-        (property) => `${property} ${this.durationValue} ${this.easingValue}`,
-      )
+      .map((property) => `${property} ${cfg}`)
       .join(', ');
 
     const other = this.otherTransitions.map((transition) =>
@@ -150,6 +195,6 @@ class Transition {
  * })
  * ```
  */
-export function transition(...properties: string[]): Transition {
+export function transition(...properties: (keyof Properties)[]): Transition {
   return new Transition(properties);
 }

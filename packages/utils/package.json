@@ -20,5 +20,8 @@
     "directory": "packages/utils"
   },
   "author": "SEEK",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "csstype": "^3.0.7"
+  }
 }

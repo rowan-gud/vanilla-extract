@@ -571,7 +571,11 @@ importers:
         specifier: ^1.15.2
         version: link:../css
 
-  packages/utils: {}
+  packages/utils:
+    dependencies:
+      csstype:
+        specifier: ^3.0.7
+        version: 3.0.10
 
   packages/vite-plugin:
     dependencies:
@@ -6801,19 +6805,19 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@vanilla-extract/babel-plugin-debug-ids@1.0.5:
-    resolution: {integrity: sha512-Rc9A6ylsw7EBErmpgqCMvc/Z/eEZxI5k1xfLQHw7f5HHh3oc5YfzsAsYU/PdmSNjF1dp3sGEViBdDltvwnfVaA==}
+  /@vanilla-extract/babel-plugin-debug-ids@1.0.6:
+    resolution: {integrity: sha512-C188vUEYmw41yxg3QooTs8r1IdbDQQ2mH7L5RkORBnHx74QlmsNfqVmKwAVTgrlYt8JoRaWMtPfGm/Ql0BNQrA==}
     dependencies:
       '@babel/core': 7.23.9
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@vanilla-extract/css@1.15.1:
-    resolution: {integrity: sha512-puAfTKAUtsMr2+D+grQNjU5umsdw9zdVgQflUlbzS/tGORaAHdgaYz7jfKPmz1c4ZcpJ6uFNOiI50NDOAzzhyg==}
+  /@vanilla-extract/css@1.15.2:
+    resolution: {integrity: sha512-Bi61iCAtojCuqvV+FYaF5i69vBjuMQJpHPdpgKYyQvx+e2Hp79V0ELglyYOdcyg9Wh0k0MFwgCDipVd7EloTXQ==}
     dependencies:
       '@emotion/hash': 0.9.0
-      '@vanilla-extract/private': 1.0.4
+      '@vanilla-extract/private': 1.0.5
       css-what: 6.1.0
       cssesc: 3.0.0
       csstype: 3.0.10
@@ -6832,8 +6836,8 @@ packages:
     dependencies:
       '@babel/core': 7.23.9
       '@babel/plugin-syntax-typescript': 7.23.3(@babel/core@7.23.9)
-      '@vanilla-extract/babel-plugin-debug-ids': 1.0.5
-      '@vanilla-extract/css': 1.15.1
+      '@vanilla-extract/babel-plugin-debug-ids': 1.0.6
+      '@vanilla-extract/css': 1.15.2
       esbuild: 0.19.12
       eval: 0.1.8
       find-up: 5.0.0
@@ -6855,8 +6859,8 @@ packages:
       - terser
     dev: true
 
-  /@vanilla-extract/private@1.0.4:
-    resolution: {integrity: sha512-8FGD6AejeC/nXcblgNCM5rnZb9KXa4WNkR03HCWtdJBpANjTgjHEglNLFnhuvdQ78tC6afaxBPI+g7F2NX3tgg==}
+  /@vanilla-extract/private@1.0.5:
+    resolution: {integrity: sha512-6YXeOEKYTA3UV+RC8DeAjFk+/okoNz/h88R+McnzA2zpaVqTR/Ep+vszkWYlGBcMNO7vEkqbq5nT/JMMvhi+tw==}
     dev: true
 
   /@vercel/nft@0.22.1(supports-color@9.2.3):
